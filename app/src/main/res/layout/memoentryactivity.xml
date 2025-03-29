@@ -13,27 +13,27 @@
         android:gravity="bottom">
 
         <ImageButton
-            android:id="@+id/imageButtonList"
+            android:id="@+id/memoiconimage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="test"
-            app:srcCompat="@drawable/contactlisticon" />
+            app:srcCompat="@drawable/memoicon" />
 
         <ImageButton
-            android:id="@+id/imageButtonMap"
+            android:id="@+id/listiconimage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="test"
-            app:srcCompat="@drawable/mapicon" />
+            app:srcCompat="@drawable/listicon" />
 
         <ImageButton
-            android:id="@+id/imageButtonSettings"
+            android:id="@+id/filterbuttonimage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="test"
-            app:srcCompat="@drawable/settingsicon" />
+            app:srcCompat="@drawable/filtericon" />
     </LinearLayout>
 </LinearLayout>
