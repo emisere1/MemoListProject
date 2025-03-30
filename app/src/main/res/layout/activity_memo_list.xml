@@ -21,10 +21,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:text="Delete:"
+            android:text="@string/delete"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="TouchTargetSizeCheck,UseSwitchCompatOrMaterialXml" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -43,9 +43,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/material_dynamic_neutral80"
+            android:importantForAccessibility="no"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/listicon"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/addMemoButton"
@@ -53,9 +54,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/material_dynamic_neutral80"
+            android:importantForAccessibility="no"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/img"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck,VisualLintBounds" />
 
         <ImageButton
             android:id="@+id/settingsButton"
@@ -65,7 +67,7 @@
             android:background="@color/material_dynamic_neutral80"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/settings"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck,VisualLintBounds" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

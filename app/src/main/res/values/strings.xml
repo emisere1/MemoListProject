@@ -43,5 +43,14 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="textview">TextView</string>
-    <string name="textview">TextView</string>
+    <string name="enter_keywords">Enter Keywords</string>
+    <string name="todo">TODO</string>
+    <string name="high">High</string>
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="sort_by_date">Sort By Date:</string>
+    <string name="off">OFF</string>
+    <string name="search_by_title_description">Search By Title/Description:</string>
+    <string name="sort_by_priorty">Sort By Priorty:</string>
+    <string name="delete">Delete:</string>
 </resources>

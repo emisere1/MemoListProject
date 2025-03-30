@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MemoList extends AppCompatActivity {
 
-    ArrayList<Memo> memos;
+    //ArrayList<Memo> memos;
     RecyclerView memoList;
 
     private View.OnClickListener onItemClickListener = new View.OnClickListener() {
@@ -21,9 +21,9 @@ public class MemoList extends AppCompatActivity {
         public void onClick(View view) {
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
-            int memoID = memos.get(position).getMemoID();
+          //  int memoID = memos.get(position).getMemoID();
             Intent intent = new Intent(MemoList.this, MemoEntryActivity.class);
-            intent.putExtra("memoID", memoID);
+          //  intent.putExtra("memoID", memoID);
             startActivity(intent);
         }
     };
@@ -39,4 +39,6 @@ public class MemoList extends AppCompatActivity {
             return insets;
         });
     }
+
+
 }
