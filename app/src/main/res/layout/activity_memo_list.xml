@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MemoListPageActivy">
+    tools:context=".MemoList">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
@@ -54,7 +54,8 @@
             android:layout_weight="1"
             android:background="@color/material_dynamic_neutral80"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/img" />
+            app:srcCompat="@drawable/img"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/settingsButton"
@@ -63,7 +64,8 @@
             android:layout_weight="1"
             android:background="@color/material_dynamic_neutral80"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/settings" />
+            app:srcCompat="@drawable/settings"
+            tools:ignore="SpeakableTextPresentCheck" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -80,4 +82,4 @@
         app:layout_constraintBottom_toTopOf="@id/navBar"
         />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
