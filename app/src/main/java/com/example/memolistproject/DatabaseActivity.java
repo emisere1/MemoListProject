@@ -11,7 +11,7 @@ public class DatabaseActivity extends SQLiteOpenHelper {
     memo title string, memo description string, priority selection num
     date ( from calander ) editable)
      */
-    private static final String CREATE_TABLE_MEMOS = "create table memos (_id integer primary key autoincrement, "
+    private static final String CREATE_TABLE_MEMOS = "create table memos (memo_id integer primary key autoincrement, "
             + "memotitle text not null, memodescription text not null, memodate text, memotext text);"; // initial memo db records
     public DatabaseActivity(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
