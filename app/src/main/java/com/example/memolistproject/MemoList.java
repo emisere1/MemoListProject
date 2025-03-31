@@ -1,8 +1,10 @@
 package com.example.memolistproject;
 
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +26,8 @@ public class MemoList extends AppCompatActivity {
           //  int memoID = memos.get(position).getMemoID();
             Intent intent = new Intent(MemoList.this, MemoEntryActivity.class);
           //  intent.putExtra("memoID", memoID);
+            settingsButtonPressed();
+            addMemoButton();
             startActivity(intent);
         }
     };
@@ -39,6 +43,45 @@ public class MemoList extends AppCompatActivity {
             return insets;
         });
     }
+
+    public void settingsButtonPressed(){ // not sure what the settings button is for but this is what i think it is for now
+        ImageButton settingsButton = findViewById(R.id.settingsButton);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(MemoList.this, SortActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+
+        });
+
+    }
+
+    public void addMemoButton() {
+        ImageButton addMemoButton = findViewById(R.id.addMemoButton);
+        addMemoButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(MemoList.this, MemoEntryActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+    }
+
+    /*
+    public void listMemoButton() {
+        ImageButton listMemoButton = findViewById(R.id.ListButton);
+        listMemoButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(MemoEntryActivity.this, MemoList.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+    }
+
+    commented out for the current activity so that the button does not do anything
+     */
 
 
 }

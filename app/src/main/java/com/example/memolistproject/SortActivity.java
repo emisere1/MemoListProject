@@ -1,9 +1,12 @@
 package com.example.memolistproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
@@ -27,12 +30,55 @@ public class SortActivity extends AppCompatActivity {
         initSubjectSettings();
         initSortDateClick();
         initSortPriorityClick();
+        addMemoButton();
+        listMemoButton();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
     }
+/*
+    public void settingsButtonPressed(){ // not sure what the settings button is for but this is what i think it is for now
+        ImageButton settingsButton = findViewById(R.id.settingsButton);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(SortActivity.this, SortActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+
+        });
+
+    }
+
+
+ */
+    public void addMemoButton() {
+        ImageButton addMemoButton = findViewById(R.id.addMemoButton);
+        addMemoButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(SortActivity.this, MemoEntryActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+    }
+
+
+    public void listMemoButton() {
+        ImageButton listMemoButton = findViewById(R.id.ListButton);
+        listMemoButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(SortActivity.this, MemoList.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+    }
+
+
+
 
     private void initDateSettings(){
         String sortBy = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortField", "MemoDate");

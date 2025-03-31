@@ -12,9 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MemoListProject"
         tools:targetApi="31">
+
+
         <activity
             android:name=".SortActivity"
             android:exported="false" />
+        <activity
+            android:name=".MemoEntryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DateSelectionActivity"
+            android:exported="false" />
+
         <activity
             android:name=".MemoList"
             android:exported="false"
