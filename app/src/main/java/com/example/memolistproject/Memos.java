@@ -3,14 +3,14 @@ package com.example.memolistproject;
 public class Memos {
     /*
      private static final String CREATE_TABLE_MEMOS = "create table memos (memo_id integer primary key autoincrement, "
-            + "memotitle text not null, memodescription text not null, memodate text, memotext text);"; // initial memo db records
+            + "memotitle text not null, memodescription text not null, memodate text, memopriority text);"; // initial memo db records
 
      */
    private int memoID;
-   private String memoTitle;
+   private String memoSubject;
    private String memoDescription;
    private String memoDate;
-   private String memoText;
+   private int memoPriority;
 
     public int getMemoID() {
         return memoID;
@@ -20,12 +20,12 @@ public class Memos {
         this.memoID = memoID;
     }
 
-    public String getMemoTitle() {
-        return memoTitle;
+    public String getMemoSubject() {
+        return memoSubject;
     }
 
-    public void setMemoTitle(String memoTitle) {
-        this.memoTitle = memoTitle;
+    public void setMemoSubject(String memoSubject) {
+        this.memoSubject = memoSubject;
     }
 
     public String getMemoDescription() {
@@ -44,12 +44,12 @@ public class Memos {
         this.memoDate = memoDate;
     }
 
-    public String getMemoText() {
-        return memoText;
+    public int getMemoPriority() {
+        return memoPriority;
     }
 
-    public void setMemoText(String memoText) {
-        this.memoText = memoText;
+    public void setMemoPriority(int memoPriority) {
+        this.memoPriority = memoPriority;
     }
 
 }
