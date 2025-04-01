@@ -6,6 +6,11 @@ public class Memos {
             + "memotitle text not null, memodescription text not null, memodate text, memopriority text);"; // initial memo db records
 
      */
+    public static final int PRIORITY_HIGH = 1;
+    public static final int PRIORITY_MEDIUM = 2;
+    public static final int PRIORITY_LOW = 3;
+//int priotitys for ethan
+
    private int memoID;
    private String memoSubject;
    private String memoDescription;

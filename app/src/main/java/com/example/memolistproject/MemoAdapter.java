@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -28,11 +29,20 @@ public class MemoAdapter extends RecyclerView.Adapter {
         public TextView textViewDate;
         public TextView textViewDescription;
 
+        public RadioButton radioButtonHigh;
+        public RadioButton radioButtonMedium;
+        public RadioButton radioButtonLow;
+
         public MemoViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewSubject = itemView.findViewById(R.id.textSubject);
             textViewDate = itemView.findViewById(R.id.textDate);
             textViewDescription = itemView.findViewById(R.id.textDescription);
+            radioButtonHigh = itemView.findViewById(R.id.radioHigh);
+            radioButtonMedium = itemView.findViewById(R.id.radioMedium);
+            radioButtonLow = itemView.findViewById(R.id.radioLow);
+            setupPriorityButtons();
+
             itemView.setTag(this);
             itemView.setOnClickListener(mOnItemClickListener);
         }
@@ -49,7 +59,29 @@ public class MemoAdapter extends RecyclerView.Adapter {
             return textViewDescription;
         }
 
+
+        private void setupPriorityButtons() {
+            radioButtonHigh.setOnClickListener(v -> selectPriority(Memos.PRIORITY_HIGH));
+            radioButtonMedium.setOnClickListener(v -> selectPriority(Memos.PRIORITY_MEDIUM));
+            radioButtonLow.setOnClickListener(v -> selectPriority(Memos.PRIORITY_LOW));
+        }
+        private void selectPriority(int priority) {
+            radioButtonHigh.setChecked(false);
+            radioButtonMedium.setChecked(false);
+            radioButtonLow.setChecked(false);
+
+            if (priority == Memos.PRIORITY_HIGH) {
+                radioButtonHigh.setChecked(true);
+            } else if (priority == Memos.PRIORITY_MEDIUM) {
+                radioButtonMedium.setChecked(true);
+            } else if (priority == Memos.PRIORITY_LOW) {
+                radioButtonLow.setChecked(true);
+            }
+        }
+
     }
+
+
 
     public void setOnItemClickListener(View.OnClickListener itemClickListener) {
         mOnItemClickListener = itemClickListener;

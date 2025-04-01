@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:id="@+id/activity_main"
     tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <EditText
         android:id="@+id/editMemoTitle"
@@ -15,8 +16,7 @@
         android:ems="10"
         android:hint="Enter A Title"
         android:inputType="textPersonName"
-        android:required="true"
-        android:layout_margin="16dp"/>
+        android:layout_marginBottom="16dp"/>
 
     <EditText
         android:id="@+id/editMemoDescription"
@@ -25,55 +25,77 @@
         android:ems="10"
         android:hint="Enter A Description"
         android:inputType="textMultiLine"
-        android:required="true"
-        android:layout_margin="16dp"/>
+        android:layout_marginBottom="16dp"/>
 
-    <TextView
-        android:id="@+id/textDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Date"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"/>
-
-    <EditText
-        android:id="@+id/editMemoDate"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="MM/DD/YYYY"
-        android:inputType="date"
-        android:editable="true"
-        android:layout_margin="16dp"/>
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <EditText
+            android:id="@+id/editMemoDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ems="10"
+            android:hint="MM/DD/YYYY"
+            android:inputType="date"
+            android:editable="true"/>
+
+        <Button
+            android:id="@+id/buttonDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Date"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/textChooseDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Select Date"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"/>
+        android:text="Priority"
+        android:layout_marginTop="16dp"/>
 
-    <Button
-        android:id="@+id/buttonDate"
-        android:layout_width="wrap_content"
+    <RadioGroup
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Change Date"
-        android:layout_marginEnd="60dp"/>
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <RadioButton
+            android:id="@+id/radioHigh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="High"/>
+
+        <RadioButton
+            android:id="@+id/radioMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medium"/>
+
+        <RadioButton
+            android:id="@+id/radioLow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Low"/>
+    </RadioGroup>
 
     <Button
         android:id="@+id/buttonSaveMemo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Save Memo"
-        android:layout_margin="16dp"/>
+        android:layout_marginTop="16dp"/>
 
     <LinearLayout
         android:id="@+id/navBar"
         android:layout_width="match_parent"
         android:layout_height="90dp"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/ListButton"
@@ -82,7 +104,7 @@
             android:layout_weight="1"
             android:background="@android:color/darker_gray"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/listicon"/>
+            app:srcCompat="@drawable/listicon" />
 
         <ImageButton
             android:id="@+id/addMemoButton"
@@ -100,6 +122,6 @@
             android:layout_weight="1"
             android:background="@android:color/darker_gray"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/settings"/>
+            app:srcCompat="@drawable/settings" />
     </LinearLayout>
 </LinearLayout>
