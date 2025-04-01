@@ -1,3 +1,4 @@
+/*
 package com.example.memolistproject;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -42,3 +43,6 @@ public class MemoAdapter extends RecyclerView.Adapter {
 
 
 }
+
+
+ */
