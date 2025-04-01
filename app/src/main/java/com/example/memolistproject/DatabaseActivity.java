@@ -12,7 +12,7 @@ public class DatabaseActivity extends SQLiteOpenHelper {
     date ( from calander ) editable)
      */
     private static final String CREATE_TABLE_MEMOS = "create table memos (memo_id integer primary key autoincrement, "
-            + "memotitle text not null, memodescription text not null, memodate text, memotext text);"; // initial memo db records
+            + "memosubjecttext not null, memodescription text not null, memodate text, memopriority int);"; // initial memo db records
     public DatabaseActivity(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }

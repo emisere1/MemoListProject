@@ -46,6 +46,7 @@ public class DateSelectionActivity extends DialogFragment {
                 saveItem(selectedDate);
             }
         });
+
         Button cancelButton = view.findViewById(R.id.buttonCancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +56,7 @@ public class DateSelectionActivity extends DialogFragment {
         });
         return view;
     }
+
     private void saveItem(Calendar selectedTime) {
         if (getActivity() instanceof SaveDateListener) {
             SaveDateListener activity = (SaveDateListener) getActivity();

@@ -17,8 +17,9 @@
         <activity
             android:name=".SortActivity"
             android:exported="false" />
+
         <activity
-            android:name=".MemoEntryActivity"
+            android:name="DateSelectionActivity"
             android:exported="false" />
         <activity
             android:name=".MemoList"

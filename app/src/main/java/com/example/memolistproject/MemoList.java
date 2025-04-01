@@ -24,7 +24,7 @@ public class MemoList extends AppCompatActivity {
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int position = viewHolder.getAdapterPosition();
           //  int memoID = memos.get(position).getMemoID();
-            Intent intent = new Intent(MemoList.this, MemoEntryActivity.class);
+            Intent intent = new Intent(MemoList.this, MainActivity.class);
           //  intent.putExtra("memoID", memoID);
             settingsButtonPressed();
             addMemoButton();
@@ -61,7 +61,7 @@ public class MemoList extends AppCompatActivity {
         ImageButton addMemoButton = findViewById(R.id.addMemoButton);
         addMemoButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent intent = new Intent(MemoList.this, MemoEntryActivity.class);
+                Intent intent = new Intent(MemoList.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
