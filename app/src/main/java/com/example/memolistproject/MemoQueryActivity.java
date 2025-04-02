@@ -98,36 +98,37 @@ public class MemoQueryActivity {
 
     public boolean insertMemo(Memos memo) {
         boolean didSucceed = false;
-        ContentValues initialValues = new ContentValues();
         try {
-            open();
+            open();  // Ensure this method correctly opens the database
+
+            ContentValues initialValues = new ContentValues();
             initialValues.put("memoSubject", memo.getMemoSubject());
             initialValues.put("memoDescription", memo.getMemoDescription());
             initialValues.put("memoPriority", memo.getMemoPriority());
-            initialValues.put("memoDate", memo.getMemoDate().getTimeInMillis());
+            initialValues.put("memoDate", memo.getMemoDate().getTimeInMillis()); // Ensure the date is converted to milliseconds
 
-            long result = database.insert("memos", null, initialValues);
-            didSucceed = result > 0;
-            if (!didSucceed) {
-                Log.e("DatabaseError", "Failed to insert memo, result: " + result);
-            }
+            didSucceed = database.insert("memos", null, initialValues) > 0;
+            close();  // Ensure this method correctly closes the database
         } catch (Exception e) {
-            Log.e("DatabaseError", "Error inserting memo", e);
-        } finally {
-            close();
+            Log.e("Database Error", "Error inserting memo", e);
+            didSucceed = false;
         }
         return didSucceed;
     }
 
-    public boolean updateMemo(Memos memo) {
-        if (memo.getMemoDate() == null) {
-            Log.e("MemoDB", "Attempt to update memo without a date set");
-            return false;
-        }
 
+
+    public boolean updateMemo(Memos memo) {
         boolean didSucceed = false;
         try {
-            open();
+            open();  // Ensure this method correctly opens the database
+
+            if (memo.getMemoDate() == null) {
+                Log.e("MemoDB", "Attempt to update memo without a date set");
+                close();
+                return false;  // Exit if the date is not set
+            }
+
             ContentValues updateValues = new ContentValues();
             updateValues.put("memoSubject", memo.getMemoSubject());
             updateValues.put("memoDescription", memo.getMemoDescription());
@@ -137,28 +138,8 @@ public class MemoQueryActivity {
             String whereClause = "memo_id=?";
             String[] whereArgs = new String[] { String.valueOf(memo.getMemoID()) };
 
-            Log.d("MemoQueryActivity", "Updating memo with ID: " + memo.getMemoID());
-            Log.d("MemoQueryActivity", "Memo Subject: " + memo.getMemoSubject());
-            Log.d("MemoQueryActivity", "Memo Description: " + memo.getMemoDescription());
-            Log.d("MemoQueryActivity", "Memo Date: " + DateFormat.format("MM/dd/yyyy", memo.getMemoDate()).toString());
-            Log.d("MemoQueryActivity", "Memo Priority: " + memo.getMemoPriority());
-
-            // Verify if the memo_id exists in the database
-            Cursor cursor = database.rawQuery("SELECT COUNT(*) FROM memos WHERE memo_id=?", whereArgs);
-            if (cursor != null && cursor.moveToFirst()) {
-                int count = cursor.getInt(0);
-                Log.d("MemoQueryActivity", "Memo ID exists in database: " + (count > 0));
-                cursor.close();
-            }
-
-            int rowsAffected = database.update("memos", updateValues, whereClause, whereArgs);
-            didSucceed = rowsAffected > 0;
-            if (didSucceed) {
-                Log.d("MemoQueryActivity", "Memo updated successfully, rows affected: " + rowsAffected);
-            } else {
-                Log.e("MemoQueryActivity", "Failed to update memo, rows affected: " + rowsAffected);
-            }
-            close();
+            didSucceed = database.update("memos", updateValues, whereClause, whereArgs) > 0;
+            close();  // Ensure this method correctly closes the database
         } catch (Exception e) {
             Log.e("Database Error", "Error updating memo", e);
             didSucceed = false;
