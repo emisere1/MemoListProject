@@ -171,6 +171,18 @@ public class MemoQueryActivity {
         dbHelper.close();
     }
 
+    public boolean deleteMemo(int memoID) {
+        boolean didDelete = false;
+        try {
+            open();
+
+            didDelete = database.delete("memos", "memo_id=" + memoID, null) > 0;
+            close();
+        } catch (Exception e) {
+        }
+        return didDelete;
+    }
+
     public boolean insertMemo(Memos memo) {
         boolean didSucceed = false;
         try {

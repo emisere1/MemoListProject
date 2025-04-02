@@ -96,6 +96,26 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.MemoViewHolder
         }
     }
 
+    public void removeItem(int position) {
+        Memos memo = memoData.get(position);
+        MemoQueryActivity db = new MemoQueryActivity(parentContext);
+        try {
+            db.open();
+            boolean didDelete = db.deleteMemo(memo.getMemoID());
+            db.close();
+            if (didDelete){
+                memoData.remove(position);
+                notifyItemRemoved(position);
+            }
+            else{
+                Toast.makeText(parentContext, "Delete failed", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(parentContext, "Delete failed", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
     @Override
     public int getItemCount() {
         return memoData.size();
