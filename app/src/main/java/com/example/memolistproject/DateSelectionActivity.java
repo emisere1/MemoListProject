@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import androidx.fragment.app.DialogFragment;
 
-
 import java.util.Calendar;
 
 public class DateSelectionActivity extends DialogFragment {
@@ -19,6 +18,7 @@ public class DateSelectionActivity extends DialogFragment {
     public interface SaveDateListener {
         void didFinishDatePickerDialog(Calendar selectedTime);
     }
+
     public DateSelectionActivity() {
     }
 
@@ -39,8 +39,8 @@ public class DateSelectionActivity extends DialogFragment {
             }
         });
 
-        Button saveButton = view.findViewById(R.id.buttonSelect);
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        Button saveDateButton = view.findViewById(R.id.buttonSelect);
+        saveDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 saveItem(selectedDate);
@@ -60,7 +60,6 @@ public class DateSelectionActivity extends DialogFragment {
     private void saveItem(Calendar selectedTime) {
         if (getActivity() instanceof SaveDateListener) {
             SaveDateListener activity = (SaveDateListener) getActivity();
-
             activity.didFinishDatePickerDialog(selectedTime);
             getDialog().dismiss();
         }

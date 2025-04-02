@@ -19,6 +19,11 @@ public class Memos {
    private Calendar memoDate;
    private int memoPriority;
 
+   public Memos() {
+       memoID = -1;
+       memoDate = Calendar.getInstance();
+    }
+
     public int getMemoID() {
         return memoID;
     }
