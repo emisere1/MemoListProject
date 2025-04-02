@@ -184,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements DateSelectionActi
     public void didFinishDatePickerDialog(Calendar selectedTime) {
         EditText editMemoDate = findViewById(R.id.editMemoDate);
         editMemoDate.setText(DateFormat.format("MM/dd/yyyy", selectedTime).toString());
+        currentMemo.setMemoDate(selectedTime);
     }
 
     public void listMemoButton() {
