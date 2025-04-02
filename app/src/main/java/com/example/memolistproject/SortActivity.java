@@ -3,6 +3,8 @@ package com.example.memolistproject;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -19,6 +21,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class SortActivity extends AppCompatActivity {
+
+    private EditText etSubject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,22 +42,7 @@ public class SortActivity extends AppCompatActivity {
             return insets;
         });
     }
-/*
-    public void settingsButtonPressed(){ // not sure what the settings button is for but this is what i think it is for now
-        ImageButton settingsButton = findViewById(R.id.settingsButton);
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent intent = new Intent(SortActivity.this, SortActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
 
-        });
-
-    }
-
-
- */
     public void addMemoButton() {
         ImageButton addMemoButton = findViewById(R.id.addMemoButton);
         addMemoButton.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +53,6 @@ public class SortActivity extends AppCompatActivity {
             }
         });
     }
-
 
     public void listMemoButton() {
         ImageButton listMemoButton = findViewById(R.id.ListButton);
@@ -77,34 +65,26 @@ public class SortActivity extends AppCompatActivity {
         });
     }
 
-
-
-
-    private void initDateSettings(){
-        String sortBy = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortField", "MemoDate");
-        String sortOrder = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortOrder", "ASC");
+    private void initDateSettings() {
+        String sortOrder = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortFieldDate", "ASC");
         Switch sDate = findViewById(R.id.switchDate);
-        if (sDate.isChecked()){
-            sDate.setChecked(true);
-        } else {
-            sDate.setChecked(false);
-        }
+        sDate.setChecked("ASC".equals(sortOrder));
     }
-    private void initPrioritySettings(){
-        String sortBy = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortField", "MemoPriority");
-        String sortOrder = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortOrder", "ASC");
-        RadioButton rblow = findViewById(R.id.rbLow);
+
+    private void initPrioritySettings() {
+        String sortPriority = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortFieldPriority", "ASC");
+        RadioButton rbLow = findViewById(R.id.rbLow);
         RadioButton rbMedium = findViewById(R.id.rbMedium);
         RadioButton rbHigh = findViewById(R.id.rbHigh);
-        if (rblow.isChecked()){
-            rblow.setChecked(true);
-        } else if (rbMedium.isChecked()){
+        if ("Low".equals(sortPriority)) {
+            rbLow.setChecked(true);
+        } else if ("Medium".equals(sortPriority)) {
             rbMedium.setChecked(true);
-        } else if (rbHigh.isChecked()){
+        } else if ("High".equals(sortPriority)) {
             rbHigh.setChecked(true);
         }
     }
-    // Update the SharedPreferences to store multiple sorting criteria
+
     private void updateSortPreferences(String field, String order) {
         getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE)
                 .edit()
@@ -112,45 +92,48 @@ public class SortActivity extends AppCompatActivity {
                 .apply();
     }
 
-    // Modify the initSortDateClick method
     private void initSortDateClick() {
         Switch sOrder = findViewById(R.id.switchDate);
         sOrder.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    updateSortPreferences("sortFieldDate", "ASC");
-                } else {
-                    updateSortPreferences("sortFieldDate", "DESC");
-                }
+                updateSortPreferences("sortFieldDate", isChecked ? "ASC" : "DESC");
             }
         });
     }
 
-    // Modify the initSortPriorityClick method
     private void initSortPriorityClick() {
         RadioGroup rgPriority = findViewById(R.id.rgPriorty);
         rgPriority.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton rbLow = findViewById(R.id.rbLow);
-                RadioButton rbMedium = findViewById(R.id.rbMedium);
-                RadioButton rbHigh = findViewById(R.id.rbHigh);
-                if (rbLow.isChecked()) {
-                    updateSortPreferences("sortFieldPriority", "ASC");
-                } else if (rbMedium.isChecked()) {
-                    updateSortPreferences("sortFieldPriority", "ASC");
-                } else if (rbHigh.isChecked()) {
-                    updateSortPreferences("sortFieldPriority", "ASC");
+                if (checkedId == R.id.rbLow) {
+                    updateSortPreferences("sortFieldPriority", "Low");
+                } else if (checkedId == R.id.rbMedium) {
+                    updateSortPreferences("sortFieldPriority", "Medium");
+                } else if (checkedId == R.id.rbHigh) {
+                    updateSortPreferences("sortFieldPriority", "High");
                 }
             }
         });
     }
 
-    // Modify the initSubjectSettings method
     private void initSubjectSettings() {
         EditText etSubject = findViewById(R.id.editTextSBTD);
-        String subject = etSubject.getText().toString();
-        updateSortPreferences("sortFieldSubject", subject);
+        String subject = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortFieldSubject", "");
+        etSubject.setText(subject);
+        etSubject.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                updateSortPreferences("sortFieldSubject", etSubject.getText().toString());
+            }
+        });
+
     }
 }

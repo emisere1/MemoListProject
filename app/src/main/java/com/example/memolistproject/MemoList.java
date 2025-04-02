@@ -60,15 +60,35 @@ public class MemoList extends AppCompatActivity {
     }
 
     private void loadMemos() {
-//        String sortDate = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortfieldDate", "MemoDate");
-//        String sortPriority = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortfieldPriority", "MemoPriority");
-//        String sortSubject = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortfieldSubject", "MemoSubject");
-//        String sortOrder = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortorder", "ASC");
+        String sortDate = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortFieldDate", "MemoDate");
+        if (sortDate == "ASC"){
+            sortDate = "MemoDate ASC";
+        }
+        else{
+            sortDate = "MemoDate DESC";
+        }
+        String sortPriority = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortFieldPriority", "MemoPriority");
+        switch (sortPriority) {
+            case "High": // High
+                sortPriority = "MemoPriority ASC";
+                break;
+            case "Medium": // Medium
+                sortPriority = "CASE WHEN MemoPriority = 2 THEN 0 ELSE MemoPriority END ASC, MemoPriority DESC";
+                break;
+            case "Low": // Low
+                sortPriority = "MemoPriority DESC";
+                break;
+            default:
+                sortPriority = "MemoPriority ASC";
+                break;
+        }
+        String sortSubject = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortFieldSubject", "MemoSubject");
+        String sortOrder = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortFieldOrder", "ASC");
         MemoQueryActivity db = new MemoQueryActivity(this);
 
         try {
             db.open();
-            memos = db.getMemos();
+            memos = db.getMemos(sortDate, sortPriority, sortSubject, sortOrder);
             db.close();
             if (memos.size() > 0) {
                 memoAdapter = new MemoAdapter(memos, this);

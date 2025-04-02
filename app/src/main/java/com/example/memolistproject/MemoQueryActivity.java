@@ -114,31 +114,28 @@ public class MemoQueryActivity {
         try {
             StringBuilder queryBuilder = new StringBuilder("SELECT * FROM memos");
 
-            // Add search condition if searchTerm is provided
             if (sortSubject != null && !sortSubject.isEmpty()) {
-                queryBuilder.append(" WHERE MemoSubject LIKE ? OR MemoDescription LIKE ?");
+                queryBuilder.append(" WHERE MemoSubject LIKE '%").append(sortSubject).append("%' OR MemoDescription LIKE '%").append(sortSubject).append("%'");
             }
-
             // Add sorting criteria
             queryBuilder.append(" ORDER BY ");
-            if (sortDate != null && !sortDate.isEmpty()) {
-                queryBuilder.append(sortDate).append(" ").append(sortOrder).append(", ");
-            }
             if (sortPriority != null && !sortPriority.isEmpty()) {
-                queryBuilder.append(sortPriority).append(" ").append(sortOrder).append(", ");
+                queryBuilder.append(sortPriority).append(", ");
             }
+            if (sortDate != null && !sortDate.isEmpty()) {
+                queryBuilder.append(sortDate).append(" ");
+            }
+
+
+           // queryBuilder.append(" ").append(sortOrder);
 
             // Remove the last comma and space
-            queryBuilder.setLength(queryBuilder.length() - 2);
+            if (queryBuilder.toString().endsWith(", ")) {
+                queryBuilder.setLength(queryBuilder.length() - 2);
+            }
 
             String query = queryBuilder.toString();
-            Cursor cursor;
-            if (sortSubject != null && !sortSubject.isEmpty()) {
-                String searchPattern = "%" + sortSubject + "%";
-                cursor = database.rawQuery(query, new String[]{searchPattern, searchPattern});
-            } else {
-                cursor = database.rawQuery(query, null);
-            }
+            Cursor cursor = database.rawQuery(query, null);
 
             if (cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
