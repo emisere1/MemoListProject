@@ -2,9 +2,15 @@ package com.example.memolistproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.activity.EdgeToEdge;
@@ -14,8 +20,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
+import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements DateSelectionActivity.SaveDateListener {
     private Memos currentMemo;
 
     @Override
@@ -23,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
         settingsButtonPressed();
         listMemoButton();
         changeDateButton();
@@ -35,7 +44,17 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Bundle extras = getIntent().getExtras();
+        if(extras!= null){
+            initMemo(extras.getInt("memoID"));
+
+        }
+        else{
+            currentMemo = new Memos();
+        }
+
     }
+
 
     private void initChangeDateButton() {
         Button changeDate = findViewById(R.id.buttonDate);
@@ -55,28 +74,32 @@ public class MainActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean wasSuccessful;
+                if (currentMemo.getMemoDate() == null) {
+                    Log.e("MainActivity", "Memo date is not set. Setting current date as default.");
+                    currentMemo.setMemoDate(Calendar.getInstance());  // Set current date as default if not set
+                }
+
                 MemoQueryActivity ds = new MemoQueryActivity(MainActivity.this);
                 try {
                     ds.open();
-                    if (currentMemo.getMemoID() == -1) {
+                    boolean wasSuccessful;
+                    if (currentMemo.getMemoID() == -1) {  // If it's a new memo
                         wasSuccessful = ds.insertMemo(currentMemo);
-
                         if (wasSuccessful) {
                             int newId = ds.getLastMemoId();
                             currentMemo.setMemoID(newId);
                         }
-
-                    } else {
+                    } else {  // Updating an existing memo
                         wasSuccessful = ds.updateMemo(currentMemo);
                     }
                     ds.close();
                 } catch (Exception e) {
-                    wasSuccessful = false;
+                    Log.e("DatabaseError", "Error in database operation", e);
                 }
             }
         });
     }
+
 
     public void changeDateButton() {
         Button changeDateButton = findViewById(R.id.buttonDate);
@@ -102,18 +125,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-   /* public void addMemoButton() {
-        ImageButton addMemoButton = findViewById(R.id.addMemoButton);
-        addMemoButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent intent = new Intent(MemoEntryActivity.this, MemoEntryActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
+    @Override
+    public void didFinishDatePickerDialog(Calendar selectedTime) {
+        EditText editMemoDate = findViewById(R.id.editMemoDate);
+        editMemoDate.setText(DateFormat.format("MM/dd/yyyy", selectedTime).toString());
     }
-    commented out for the current activity so that the button does not do anything
-    */
 
     public void listMemoButton() {
         ImageButton listMemoButton = findViewById(R.id.ListButton);
@@ -125,7 +141,50 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private void initMemo(int memoId) {
+        MemoQueryActivity ds = new MemoQueryActivity(MainActivity.this);
+        try {
+            ds.open();
+            if (memoId != -1) {
+                currentMemo = ds.getSpecificMemo(memoId);  // Assuming getSpecificMemo is correctly implemented to fetch a memo
+            } else {
+                currentMemo = new Memos();  // Create a new memo if no ID is provided or ID is -1
+            }
+            ds.close();
+        } catch (Exception e) {
+            Toast.makeText(this, "Load memo failed", Toast.LENGTH_LONG).show();
+            currentMemo = new Memos();  // Ensure currentMemo is not null even if loading fails
+        }
+
+        // Update UI elements with memo data
+        EditText editMemoSubject = findViewById(R.id.editMemoTitle);
+        EditText editMemoDescription = findViewById(R.id.editMemoDescription);
+        EditText editMemoDate = findViewById(R.id.editMemoDate);  // Assuming there's an EditText for date
+        RadioButton radioHigh = findViewById(R.id.radioHigh);
+        RadioButton radioMedium = findViewById(R.id.radioMedium);
+        RadioButton radioLow = findViewById(R.id.radioLow);
+
+        editMemoSubject.setText(currentMemo.getMemoSubject());
+        editMemoDescription.setText(currentMemo.getMemoDescription());
+        if (currentMemo.getMemoDate() != null) {
+            editMemoDate.setText(DateFormat.format("MM/dd/yyyy", currentMemo.getMemoDate().getTimeInMillis()).toString());
+        }
+
+        // Set radio buttons according to memo priority using if-else
+        int priority = currentMemo.getMemoPriority();
+        if (priority == Memos.PRIORITY_HIGH) {
+            radioHigh.setChecked(true);
+        } else if (priority == Memos.PRIORITY_MEDIUM) {
+            radioMedium.setChecked(true);
+        } else {
+            radioLow.setChecked(true);  // This handles PRIORITY_LOW and any undefined state as a default
+        }
+    }
+
+
+
+
+
 
 
 }
-

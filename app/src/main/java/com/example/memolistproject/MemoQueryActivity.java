@@ -32,7 +32,7 @@ public class MemoQueryActivity {
         return memoSubjects;
     }
 
-    public Memos getSpecificContact(int memoID) {
+    public Memos getSpecificMemo(int memoID) {
         Memos memos = new Memos();
         String query = "SELECT * FROM memos WHERE memo_id =" + memoID;
         Cursor cursor = database.rawQuery(query, null);
@@ -42,15 +42,16 @@ public class MemoQueryActivity {
             memos.setMemoID(cursor.getInt(0));
             memos.setMemoSubject(cursor.getString(1));
             memos.setMemoDescription(cursor.getString(2));
-            memos.setMemoPriority(cursor.getInt(3));
+            memos.setMemoPriority(cursor.getInt(4));
             Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(Long.valueOf(cursor.getString(4)));
+            calendar.setTimeInMillis(Long.valueOf(cursor.getString(3)));
             memos.setMemoDate(calendar);
-
             cursor.close();
         }
         return memos;
     }
+
+
 
     public ArrayList<Memos> getMemos(String sortField, String sortOrder) {
         ArrayList<Memos> memos = new ArrayList<>();
@@ -63,10 +64,10 @@ public class MemoQueryActivity {
                     newMemo.setMemoID(cursor.getInt(0));
                     newMemo.setMemoSubject(cursor.getString(1));
                     newMemo.setMemoDescription(cursor.getString(2));
-                    newMemo.setMemoPriority(cursor.getInt(3));
                     Calendar calendar = Calendar.getInstance();
-                    calendar.setTimeInMillis(Long.parseLong(cursor.getString(4)));
+                    calendar.setTimeInMillis(Long.valueOf(cursor.getString(3)));
                     newMemo.setMemoDate(calendar);
+                    newMemo.setMemoPriority(cursor.getInt(4));
                     memos.add(newMemo);
                     cursor.moveToNext();
                 }
@@ -77,6 +78,7 @@ public class MemoQueryActivity {
         }
         return memos;
     }
+
 
     public MemoQueryActivity(Context context) {
         dbHelper = new DatabaseActivity(context);
@@ -93,38 +95,60 @@ public class MemoQueryActivity {
     public boolean insertMemo(Memos memo) {
         boolean didSucceed = false;
         try {
-            open();
+            open();  // Ensure this method correctly opens the database
+
             ContentValues initialValues = new ContentValues();
-            initialValues.put("memosubjecttext", memo.getMemoSubject());
-            initialValues.put("memodescription", memo.getMemoDescription());
-            initialValues.put("memopriority", memo.getMemoPriority());
-            initialValues.put("memodate", String.valueOf(memo.getMemoDate().getTimeInMillis()));
+            initialValues.put("memoSubject", memo.getMemoSubject());
+            initialValues.put("memoDescription", memo.getMemoDescription());
+            initialValues.put("memoPriority", memo.getMemoPriority());
+            initialValues.put("memoDate", memo.getMemoDate().getTimeInMillis()); // Ensure the date is converted to milliseconds
 
             didSucceed = database.insert("memos", null, initialValues) > 0;
-            close();
+            close();  // Ensure this method correctly closes the database
         } catch (Exception e) {
             Log.e("Database Error", "Error inserting memo", e);
+            didSucceed = false;
         }
         return didSucceed;
     }
+
+
+
+
 
     public boolean updateMemo(Memos memo) {
         boolean didSucceed = false;
         try {
-            open();
-            ContentValues updateValues = new ContentValues();
-            updateValues.put("memosubjecttext", memo.getMemoSubject());
-            updateValues.put("memodescription", memo.getMemoDescription());
-            updateValues.put("memopriority", memo.getMemoPriority());
-            updateValues.put("memodate", String.valueOf(memo.getMemoDate().getTimeInMillis()));
+            open();  // Ensure this method correctly opens the database
 
-            didSucceed = database.update("memos", updateValues, "memo_id=?", new String[]{String.valueOf(memo.getMemoID())}) > 0;
-            close();
+            if (memo.getMemoDate() == null) {
+                Log.e("MemoDB", "Attempt to update memo without a date set");
+                close();
+                return false;  // Exit if the date is not set
+            }
+
+            ContentValues updateValues = new ContentValues();
+            updateValues.put("memoSubject", memo.getMemoSubject());
+            updateValues.put("memoDescription", memo.getMemoDescription());
+            updateValues.put("memoPriority", memo.getMemoPriority());
+            updateValues.put("memoDate", memo.getMemoDate().getTimeInMillis());
+
+            String whereClause = "memo_id=?";
+            String[] whereArgs = new String[] { String.valueOf(memo.getMemoID()) };
+
+            didSucceed = database.update("memos", updateValues, whereClause, whereArgs) > 0;
+            close();  // Ensure this method correctly closes the database
         } catch (Exception e) {
             Log.e("Database Error", "Error updating memo", e);
+            didSucceed = false;
         }
         return didSucceed;
     }
+
+
+
+
+
 
     public int getLastMemoId() {
         int lastId = -1;

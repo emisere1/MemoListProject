@@ -19,9 +19,6 @@
             android:exported="false" />
 
         <activity
-            android:name="DateSelectionActivity"
-            android:exported="false" />
-        <activity
             android:name=".MemoList"
             android:exported="false"
             android:theme="@style/Theme.MemoListProject" />

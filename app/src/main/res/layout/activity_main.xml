@@ -40,8 +40,8 @@
             android:layout_weight="2"
             android:ems="10"
             android:hint="MM/DD/YYYY"
-            android:inputType="date"
-            android:editable="true"/>
+            android:inputType="none"
+            android:focusable="false"/>
 
         <Button
             android:id="@+id/buttonDate"

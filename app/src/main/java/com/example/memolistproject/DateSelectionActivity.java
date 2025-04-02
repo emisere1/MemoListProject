@@ -60,7 +60,6 @@ public class DateSelectionActivity extends DialogFragment {
     private void saveItem(Calendar selectedTime) {
         if (getActivity() instanceof SaveDateListener) {
             SaveDateListener activity = (SaveDateListener) getActivity();
-            activity.didFinishDatePickerDialog(selectedTime);
 
             activity.didFinishDatePickerDialog(selectedTime);
             getDialog().dismiss();
