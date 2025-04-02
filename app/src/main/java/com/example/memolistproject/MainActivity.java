@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements DateSelectionActi
         initTextChangedEvents();
 
 
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -72,22 +71,74 @@ public class MainActivity extends AppCompatActivity implements DateSelectionActi
 
         });
     }
+    private void initTextChangedEvents(){
+        final EditText memoSubject = findViewById(R.id.editMemoTitle);
+        memoSubject.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                currentMemo.setMemoSubject(memoSubject.getText().toString());
+
+            }
+        });
+        final EditText memoDescription = findViewById(R.id.editMemoDescription);
+        memoDescription.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                currentMemo.setMemoDescription(memoDescription.getText().toString());
+
+            }
+        });
+    }
+    private void savePriorityToCurrentMemo() {
+        RadioButton radioHigh = findViewById(R.id.radioHigh);
+        RadioButton radioMedium = findViewById(R.id.radioMedium);
+        RadioButton radioLow = findViewById(R.id.radioLow);
+
+        if (radioHigh.isChecked()) {
+            currentMemo.setMemoPriority(Memos.PRIORITY_HIGH);
+        } else if (radioMedium.isChecked()) {
+            currentMemo.setMemoPriority(Memos.PRIORITY_MEDIUM);
+        } else if (radioLow.isChecked()) {
+            currentMemo.setMemoPriority(Memos.PRIORITY_LOW);
+        }
+    }
 
     private void initSaveButton() {
         Button saveButton = findViewById(R.id.buttonSaveMemo);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                savePriorityToCurrentMemo();
                 if (currentMemo.getMemoDate() == null) {
                     Log.e("MainActivity", "Memo date is not set. Setting current date as default.");
-                    currentMemo.setMemoDate(Calendar.getInstance());
+                    currentMemo.setMemoDate(Calendar.getInstance());  // Set current date as default if not set
                 }
 
                 MemoQueryActivity ds = new MemoQueryActivity(MainActivity.this);
                 try {
                     ds.open();
                     boolean wasSuccessful;
-                    if (currentMemo.getMemoID() == -1) {
+                    if (currentMemo.getMemoID() == -1) {  // If it's a new memo
                         wasSuccessful = ds.insertMemo(currentMemo);
                         if (wasSuccessful) {
                             int newId = ds.getLastMemoId();
@@ -103,27 +154,6 @@ public class MainActivity extends AppCompatActivity implements DateSelectionActi
             }
         });
     }
-
-    private void initTextChangedEvents() {
-        final EditText etMemoSubject = findViewById(R.id.editMemoTitle);
-        etMemoSubject.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-                currentMemo.setMemoSubject(etMemoSubject.getText().toString());
-            }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        });
-
-        final EditText etMemoDescription = findViewById(R.id.editMemoDescription);
-        etMemoDescription.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-                currentMemo.setMemoDescription(etMemoDescription.getText().toString());
-            }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        });
-    }
-
 
 
     public void changeDateButton() {
@@ -205,4 +235,11 @@ public class MainActivity extends AppCompatActivity implements DateSelectionActi
             radioLow.setChecked(true);  // This handles PRIORITY_LOW and any undefined state as a default
         }
     }
+
+
+
+
+
+
+
 }

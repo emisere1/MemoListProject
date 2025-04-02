@@ -21,7 +21,7 @@ public class MemoQueryActivity {
     public ArrayList<String> getMemoSubjectName() {
         ArrayList<String> memoSubjects = new ArrayList<>();
         try {
-            String query = "SELECT memosubjecttext FROM memos"; // Corrected field name
+            String query = "SELECT memosubject FROM memos"; // Corrected field name
             Cursor cursor = database.rawQuery(query, null);
             if (cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
@@ -57,11 +57,89 @@ public class MemoQueryActivity {
 
 
 
-    public ArrayList<Memos> getMemos(String sortField, String sortOrder) {
+//    public ArrayList<Memos> getMemos(String sortDate, String sortPriority, String sortSubject, String sortBy) {
+//        ArrayList<Memos> memos = new ArrayList<>();
+//        try {
+//            String query = "SELECT * FROM memos ORDER BY " + sortDate + " " + sortPriority;
+//            Cursor cursor = database.rawQuery(query, null);
+//            if (cursor.moveToFirst()) {
+//                while (!cursor.isAfterLast()) {
+//                    Memos newMemo = new Memos();
+//                    newMemo.setMemoID(cursor.getInt(0));
+//                    newMemo.setMemoSubject(cursor.getString(1));
+//                    newMemo.setMemoDescription(cursor.getString(2));
+//                    newMemo.setMemoPriority(cursor.getInt(3));
+//                    Calendar calendar = Calendar.getInstance();
+//                    calendar.setTimeInMillis(Long.parseLong(cursor.getString(4)));
+//                    newMemo.setMemoDate(calendar);
+//                    memos.add(newMemo);
+//                    cursor.moveToNext();
+//                }
+//            }
+//            cursor.close();
+//        } catch (Exception e) {
+//            Log.e("Database Error", "Error retrieving memos", e);
+//        }
+//        return memos;
+//    }
+
+    public ArrayList<Memos> getMemos(){
+        ArrayList<Memos> memos = new ArrayList<Memos>();
+        try{
+            String query = "Select * from memos";
+            Cursor cursor = database.rawQuery(query, null);
+            Memos newMemo;
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast()){
+                newMemo = new Memos();
+                newMemo.setMemoID(cursor.getInt(0));
+                newMemo.setMemoSubject(cursor.getString(1));
+                newMemo.setMemoDescription(cursor.getString(2));
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(Long.valueOf(cursor.getString(3)));
+                newMemo.setMemoDate(calendar);
+                newMemo.setMemoPriority(cursor.getInt(4));
+                memos.add(newMemo);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        catch (Exception e){
+            memos = new ArrayList<Memos>();
+        }
+        return memos;
+    }
+    public ArrayList<Memos> getMemos(String sortDate, String sortPriority, String sortSubject, String sortOrder) {
         ArrayList<Memos> memos = new ArrayList<>();
         try {
-            String query = "SELECT * FROM memos ORDER BY " + sortField + " " + sortOrder;
-            Cursor cursor = database.rawQuery(query, null);
+            StringBuilder queryBuilder = new StringBuilder("SELECT * FROM memos");
+
+            // Add search condition if searchTerm is provided
+            if (sortSubject != null && !sortSubject.isEmpty()) {
+                queryBuilder.append(" WHERE MemoSubject LIKE ? OR MemoDescription LIKE ?");
+            }
+
+            // Add sorting criteria
+            queryBuilder.append(" ORDER BY ");
+            if (sortDate != null && !sortDate.isEmpty()) {
+                queryBuilder.append(sortDate).append(" ").append(sortOrder).append(", ");
+            }
+            if (sortPriority != null && !sortPriority.isEmpty()) {
+                queryBuilder.append(sortPriority).append(" ").append(sortOrder).append(", ");
+            }
+
+            // Remove the last comma and space
+            queryBuilder.setLength(queryBuilder.length() - 2);
+
+            String query = queryBuilder.toString();
+            Cursor cursor;
+            if (sortSubject != null && !sortSubject.isEmpty()) {
+                String searchPattern = "%" + sortSubject + "%";
+                cursor = database.rawQuery(query, new String[]{searchPattern, searchPattern});
+            } else {
+                cursor = database.rawQuery(query, null);
+            }
+
             if (cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
                     Memos newMemo = new Memos();

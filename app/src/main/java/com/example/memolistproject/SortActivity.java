@@ -104,29 +104,31 @@ public class SortActivity extends AppCompatActivity {
             rbHigh.setChecked(true);
         }
     }
-    private void initSubjectSettings(){
-        String sortBy = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortField", "MemoSubject");
-        String sortOrder = getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).getString("sortOrder", "ASC");
-        EditText etSubject = findViewById(R.id.editTextSBTD);
-        String subject = etSubject.getText().toString();
+    // Update the SharedPreferences to store multiple sorting criteria
+    private void updateSortPreferences(String field, String order) {
+        getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE)
+                .edit()
+                .putString(field, order)
+                .apply();
     }
 
-    private void initSortDateClick(){
+    // Modify the initSortDateClick method
+    private void initSortDateClick() {
         Switch sOrder = findViewById(R.id.switchDate);
         sOrder.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).edit().putString("sortField", "MemoDate").apply();
-                    getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).edit().putString("sortOrder", "ASC").apply();
+                if (isChecked) {
+                    updateSortPreferences("sortFieldDate", "ASC");
                 } else {
-                    getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).edit().putString("sortField", "MemoDate").apply();
-                    getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).edit().putString("sortOrder", "DESC").apply();
+                    updateSortPreferences("sortFieldDate", "DESC");
                 }
             }
         });
     }
-    private void initSortPriorityClick(){
+
+    // Modify the initSortPriorityClick method
+    private void initSortPriorityClick() {
         RadioGroup rgPriority = findViewById(R.id.rgPriorty);
         rgPriority.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -134,17 +136,21 @@ public class SortActivity extends AppCompatActivity {
                 RadioButton rbLow = findViewById(R.id.rbLow);
                 RadioButton rbMedium = findViewById(R.id.rbMedium);
                 RadioButton rbHigh = findViewById(R.id.rbHigh);
-                if (rbLow.isChecked()){
-                    getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).edit().putString("sortField", "MemoPriority").apply();
-                    getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).edit().putString("sortOrder", "ASC").apply();
-                } else if (rbMedium.isChecked()){
-                    getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).edit().putString("sortField", "MemoPriority").apply();
-                    getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).edit().putString("sortOrder", "ASC").apply();
-                } else if (rbHigh.isChecked()){
-                    getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).edit().putString("sortField", "MemoPriority").apply();
-                    getSharedPreferences("MemoListPreferences", Context.MODE_PRIVATE).edit().putString("sortOrder", "ASC").apply();
+                if (rbLow.isChecked()) {
+                    updateSortPreferences("sortFieldPriority", "ASC");
+                } else if (rbMedium.isChecked()) {
+                    updateSortPreferences("sortFieldPriority", "ASC");
+                } else if (rbHigh.isChecked()) {
+                    updateSortPreferences("sortFieldPriority", "ASC");
                 }
             }
         });
+    }
+
+    // Modify the initSubjectSettings method
+    private void initSubjectSettings() {
+        EditText etSubject = findViewById(R.id.editTextSBTD);
+        String subject = etSubject.getText().toString();
+        updateSortPreferences("sortFieldSubject", subject);
     }
 }
