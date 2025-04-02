@@ -12,7 +12,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class MemoAdapter extends RecyclerView.Adapter {
 
     private Context parentContext;
@@ -41,7 +45,7 @@ public class MemoAdapter extends RecyclerView.Adapter {
             radioButtonHigh = itemView.findViewById(R.id.radioHigh);
             radioButtonMedium = itemView.findViewById(R.id.radioMedium);
             radioButtonLow = itemView.findViewById(R.id.radioLow);
-            setupPriorityButtons();
+            clickedPriorityButtons();
 
             itemView.setTag(this);
             itemView.setOnClickListener(mOnItemClickListener);
@@ -60,10 +64,25 @@ public class MemoAdapter extends RecyclerView.Adapter {
         }
 
 
-        private void setupPriorityButtons() {
-            radioButtonHigh.setOnClickListener(v -> selectPriority(Memos.PRIORITY_HIGH));
-            radioButtonMedium.setOnClickListener(v -> selectPriority(Memos.PRIORITY_MEDIUM));
-            radioButtonLow.setOnClickListener(v -> selectPriority(Memos.PRIORITY_LOW));
+        private void clickedPriorityButtons() {
+            radioButtonHigh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectPriority(Memos.PRIORITY_HIGH);
+                }
+            });
+            radioButtonMedium.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectPriority(Memos.PRIORITY_MEDIUM);
+                }
+            });
+            radioButtonLow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectPriority(Memos.PRIORITY_LOW);
+                }
+            });
         }
         private void selectPriority(int priority) {
             radioButtonHigh.setChecked(false);
@@ -99,7 +118,10 @@ public class MemoAdapter extends RecyclerView.Adapter {
         MemoViewHolder mvh = (MemoViewHolder) holder;
         mvh.getSubjectTextView().setText(memoData.get(position).getMemoSubject());
         mvh.getDescriptionTextView().setText(memoData.get(position).getMemoDescription());
-        mvh.getDateTextView().setText(memoData.get(position).getMemoDate());
+        Calendar memoDate = memoData.get(position).getMemoDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String dateString = sdf.format(memoDate.getTime());
+        mvh.getDateTextView().setText(dateString);
         int pri = memoData.get(position).getMemoPriority();
         if (pri == 1) {
             mvh.itemView.setBackgroundColor(Color.RED);

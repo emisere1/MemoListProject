@@ -5,14 +5,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 public class DatabaseActivity extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "MemoListProject.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     /*
     field values
     memo title string, memo description string, priority selection num
     date ( from calander ) editable)
      */
     private static final String CREATE_TABLE_MEMOS = "create table memos (memo_id integer primary key autoincrement, "
-            + "memosubjecttext not null, memodescription text not null, memodate text, memopriority int);"; // initial memo db records
+            + "memosubjecttext text, memodescription text, memodate text, memopriority int);"; // initial memo db records
     public DatabaseActivity(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }

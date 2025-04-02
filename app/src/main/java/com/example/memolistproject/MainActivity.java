@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ToggleButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import androidx.fragment.app.FragmentManager;
 
 
 public class MainActivity extends AppCompatActivity {
+    private Memos currentMemo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         listMemoButton();
         changeDateButton();
         initChangeDateButton();
+        initSaveButton();
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -43,6 +47,34 @@ public class MainActivity extends AppCompatActivity {
                 datePickerDialog.show(fm, "DatePick");
             }
 
+        });
+    }
+
+    private void initSaveButton() {
+        Button saveButton = findViewById(R.id.buttonSaveMemo);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean wasSuccessful;
+                MemoQueryActivity ds = new MemoQueryActivity(MainActivity.this);
+                try {
+                    ds.open();
+                    if (currentMemo.getMemoID() == -1) {
+                        wasSuccessful = ds.insertMemo(currentMemo);
+
+                        if (wasSuccessful) {
+                            int newId = ds.getLastMemoId();
+                            currentMemo.setMemoID(newId);
+                        }
+
+                    } else {
+                        wasSuccessful = ds.updateMemo(currentMemo);
+                    }
+                    ds.close();
+                } catch (Exception e) {
+                    wasSuccessful = false;
+                }
+            }
         });
     }
 

@@ -1,5 +1,7 @@
 package com.example.memolistproject;
 
+import java.util.Calendar;
+
 public class Memos {
     /*
      private static final String CREATE_TABLE_MEMOS = "create table memos (memo_id integer primary key autoincrement, "
@@ -14,7 +16,7 @@ public class Memos {
    private int memoID;
    private String memoSubject;
    private String memoDescription;
-   private String memoDate;
+   private Calendar memoDate;
    private int memoPriority;
 
     public int getMemoID() {
@@ -41,11 +43,11 @@ public class Memos {
         this.memoDescription = memoDescription;
     }
 
-    public String getMemoDate() {
+    public Calendar getMemoDate() {
         return memoDate;
     }
 
-    public void setMemoDate(String memoDate) {
+    public void setMemoDate(Calendar memoDate) {
         this.memoDate = memoDate;
     }
 
