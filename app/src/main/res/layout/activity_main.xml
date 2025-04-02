@@ -59,28 +59,29 @@
         android:layout_marginTop="16dp"/>
 
     <RadioGroup
+        android:id="@+id/prioritygroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/radioHigh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="High"/>
+            android:text="High" />
 
         <RadioButton
             android:id="@+id/radioMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Medium"/>
+            android:text="Medium" />
 
         <RadioButton
             android:id="@+id/radioLow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Low"/>
+            android:text="Low" />
     </RadioGroup>
 
     <Button

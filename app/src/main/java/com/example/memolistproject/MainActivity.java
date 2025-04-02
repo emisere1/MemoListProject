@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -78,10 +79,19 @@ public class MainActivity extends AppCompatActivity implements DateSelectionActi
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currentMemo.getMemoDate() == null) {
-                    Log.e("MainActivity", "Memo date is not set. Setting current date as default.");
-                    currentMemo.setMemoDate(Calendar.getInstance());
+                RadioGroup radioGroupPriority = findViewById(R.id.prioritygroup);
+                int selectedPriorityId = radioGroupPriority.getCheckedRadioButtonId();
+
+                int priority = Memos.PRIORITY_LOW;
+                if (selectedPriorityId == R.id.radioHigh) {
+                    priority = Memos.PRIORITY_HIGH;
+                } else if (selectedPriorityId == R.id.radioMedium) {
+                    priority = Memos.PRIORITY_MEDIUM;
+                } else if (selectedPriorityId == R.id.radioLow) {
+                    priority = Memos.PRIORITY_LOW;
                 }
+
+                currentMemo.setMemoPriority(priority);
 
                 MemoQueryActivity ds = new MemoQueryActivity(MainActivity.this);
                 try {
@@ -93,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements DateSelectionActi
                             int newId = ds.getLastMemoId();
                             currentMemo.setMemoID(newId);
                         }
-                    } else {  // Updating an existing memo
+                    } else {
                         wasSuccessful = ds.updateMemo(currentMemo);
                     }
                     ds.close();
@@ -103,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements DateSelectionActi
             }
         });
     }
+
 
     private void initTextChangedEvents() {
         final EditText etMemoSubject = findViewById(R.id.editMemoTitle);
@@ -170,21 +181,16 @@ public class MainActivity extends AppCompatActivity implements DateSelectionActi
         MemoQueryActivity ds = new MemoQueryActivity(MainActivity.this);
         try {
             ds.open();
-            if (memoId != -1) {
-                currentMemo = ds.getSpecificMemo(memoId);  // Assuming getSpecificMemo is correctly implemented to fetch a memo
-            } else {
-                currentMemo = new Memos();  // Create a new memo if no ID is provided or ID is -1
-            }
+                currentMemo = ds.getSpecificMemo(memoId);
             ds.close();
         } catch (Exception e) {
             Toast.makeText(this, "Load memo failed", Toast.LENGTH_LONG).show();
-            currentMemo = new Memos();  // Ensure currentMemo is not null even if loading fails
+            currentMemo = new Memos();
         }
 
-        // Update UI elements with memo data
         EditText editMemoSubject = findViewById(R.id.editMemoTitle);
         EditText editMemoDescription = findViewById(R.id.editMemoDescription);
-        EditText editMemoDate = findViewById(R.id.editMemoDate);  // Assuming there's an EditText for date
+        EditText editMemoDate = findViewById(R.id.editMemoDate);
         RadioButton radioHigh = findViewById(R.id.radioHigh);
         RadioButton radioMedium = findViewById(R.id.radioMedium);
         RadioButton radioLow = findViewById(R.id.radioLow);
@@ -195,14 +201,13 @@ public class MainActivity extends AppCompatActivity implements DateSelectionActi
             editMemoDate.setText(DateFormat.format("MM/dd/yyyy", currentMemo.getMemoDate().getTimeInMillis()).toString());
         }
 
-        // Set radio buttons according to memo priority using if-else
         int priority = currentMemo.getMemoPriority();
         if (priority == Memos.PRIORITY_HIGH) {
             radioHigh.setChecked(true);
         } else if (priority == Memos.PRIORITY_MEDIUM) {
             radioMedium.setChecked(true);
         } else {
-            radioLow.setChecked(true);  // This handles PRIORITY_LOW and any undefined state as a default
+            radioLow.setChecked(true);
         }
     }
 }
